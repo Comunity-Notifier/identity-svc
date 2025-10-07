@@ -1,0 +1,48 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches: [development, main]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install & build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Determine Docker tag
+        id: vars
+        run: |
+          if [[ "${GITHUB_REF##*/}" == "main" ]]; then
+            echo "TAG=latest" >> $GITHUB_ENV
+          elif [[ "${GITHUB_REF##*/}" == development ]]; then
+            echo "TAG=development" >> $GITHUB_ENV
+          elif [[ "${GITHUB_REF}" == refs/heads/release/* ]]; then
+            REL=${GITHUB_REF##*/}
+            echo "TAG=staging-${REL}" >> $GITHUB_ENV
+          fi
+
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/api:${{ env.TAG }} .
+
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/api:${{ env.TAG }}
