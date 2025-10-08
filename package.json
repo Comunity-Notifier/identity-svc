@@ -7,7 +7,8 @@
     "dev": "nodemon --watch src --exec ts-node ./src/main.ts",
     "build": "tsc",
     "start": "node dist/main.js",
-    "test": "jest --passWithNoTests",
+    "pretest": "prisma generate",
+    "test": "DOCKER_AUTH_CONFIG='{}' jest --passWithNoTests",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"src/**/*.{ts,js,json,md}\"",
@@ -20,8 +21,8 @@
   },
   "lint-staged": {
     "*.{ts,js}": [
-      "prettier --write",
-      "eslint --fix"
+      "eslint --fix --ignore-pattern jest.config.js",
+      "prettier --write"
     ],
     "*.{json,md}": [
       "prettier --write"
@@ -40,10 +41,15 @@
   "homepage": "https://github.com/Comunity-Notifier/identity-svc#readme",
   "dependencies": {
     "amqplib": "^0.10.9",
+    "argon2": "^0.40.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "helmet": "^7.1.0",
+    "jose": "^5.3.0",
+    "zod": "^3.23.8",
+    "@prisma/client": "^5.22.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.37.0",
@@ -60,10 +66,16 @@
     "jest": "^30.2.0",
     "lint-staged": "^16.2.3",
     "nodemon": "^3.1.10",
+    "pg": "^8.13.1",
+    "@types/pg": "^8.10.2",
     "prettier": "^3.6.2",
+    "prisma": "^5.22.0",
+    "supertest": "^7.0.0",
+    "testcontainers": "^10.10.5",
     "ts-jest": "^29.4.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.0"
+    "typescript-eslint": "^8.46.0",
+    "@types/supertest": "^2.0.16"
   }
 }
