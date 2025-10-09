@@ -15,7 +15,7 @@ COPY src ./src
 RUN npm run build
 
 # Etapa final (runtime)
-FROM node:20-alpine AS runner
+FROM node:20-slim AS runner
 
 WORKDIR /app
 ENV NODE_ENV=production
@@ -24,7 +24,7 @@ ENV NODE_ENV=production
 COPY package*.json ./
 
 # Instalar SOLO dependencias de producción
-RUN npm ci --omit=dev
+RUN npm ci --omit=dev --ignore-scripts
 
 # Copiar el código compilado desde builder
 COPY --from=builder /app/dist ./dist
