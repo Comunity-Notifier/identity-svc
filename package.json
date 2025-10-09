@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "nodemon --watch src --exec ts-node ./src/main.ts",
     "build": "tsc",
-    "start": "node dist/main.js",
     "test": "jest --passWithNoTests",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

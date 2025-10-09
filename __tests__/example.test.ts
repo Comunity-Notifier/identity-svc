@@ -1,5 +1,3 @@
-import { describe, it, expect } from '@jest/globals';
-
 describe('Pruebas de ejemplo', () => {
   it('debería sumar correctamente dos números', () => {
     const suma = (a: number, b: number) => a + b;
