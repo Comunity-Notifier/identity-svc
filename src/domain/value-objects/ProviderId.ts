@@ -12,11 +12,11 @@ export class ProviderId {
     this.provider = this.ensureEnum(value);
   }
 
-  private ensureEnum(value: unknown): AuthProvider {
-    if (!Object.values(AuthProvider).includes(value as AuthProvider)) {
+  private ensureEnum(value: AuthProvider): AuthProvider {
+    if (!Object.values(AuthProvider).includes(value)) {
       throw new InvalidFormatError(`Invalid provider: "${value}"`);
     }
-    return value as AuthProvider;
+    return value;
   }
 
   getProvider(): AuthProvider {
