@@ -25,8 +25,10 @@ void (async () => {
     }
 
     if (server) {
+      const activeServer = server;
+      server = undefined;
       await new Promise<void>((resolve) => {
-        server.close(() => resolve());
+        activeServer.close(() => resolve());
       });
     }
 
