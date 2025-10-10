@@ -3,7 +3,7 @@ import { StringValueObject } from './base/StringValueObject';
 export class Password extends StringValueObject {
   private readonly isHashed: boolean;
 
-  private constructor(value: string, isHashed: boolean) {
+  constructor(value: string, isHashed: boolean) {
     super(value);
     this.isHashed = isHashed;
 
@@ -13,13 +13,5 @@ export class Password extends StringValueObject {
       this.ensureMatches(/(?=.*[A-Z])/, 'Password must contain at least one uppercase letter');
       this.ensureMatches(/(?=.*[a-z])/, 'Password must contain at least one lowercase letter');
     }
-  }
-
-  static fromPlain(value: string): Password {
-    return new Password(value, false);
-  }
-
-  static fromHash(value: string): Password {
-    return new Password(value, true);
   }
 }

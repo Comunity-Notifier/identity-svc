@@ -2,7 +2,7 @@ import { Id } from '../value-objects/Id';
 import { ProviderId } from '../value-objects/ProviderId';
 import { Password } from '../value-objects/Password';
 import { CreatedAt } from '../value-objects/CreatedAt';
-import { UpdatedAt } from '../value-objects/UpdatedAt ';
+import { UpdatedAt } from '../value-objects/UpdatedAt';
 
 export interface AccountProps {
   id: Id;

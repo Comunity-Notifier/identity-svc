@@ -3,7 +3,7 @@ import { Name } from '../value-objects/Name';
 import { Email } from '../value-objects/Email';
 import { Image } from '../value-objects/Image';
 import { CreatedAt } from '../value-objects/CreatedAt';
-import { UpdatedAt } from '../value-objects/UpdatedAt ';
+import { UpdatedAt } from '../value-objects/UpdatedAt';
 
 export interface UserProps {
   id: Id;
@@ -25,7 +25,7 @@ export class User {
       changed = true;
     }
 
-    if (fields.image && this.props.image?.equals(fields.image) === false) {
+    if (fields.image && !this.props.image?.equals(fields.image)) {
       this.props.image = fields.image;
       changed = true;
     }
