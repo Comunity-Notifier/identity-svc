@@ -3,10 +3,11 @@ FROM node:20-slim AS builder
 
 WORKDIR /app
 
-# Copiar package.json, package-lock.json y tsconfig.json primero (caching de dependencias)
-COPY package*.json tsconfig.json ./
+COPY package*.json tsconfig.json tsconfig.build.json ./
+COPY prisma ./prisma
 
 RUN npm ci
+RUN npx prisma generate
 
 # Copiar el resto del código fuente
 COPY src ./src
