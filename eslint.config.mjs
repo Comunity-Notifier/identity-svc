@@ -71,6 +71,18 @@ export default tseslint.config(
     ...tseslint.configs.disableTypeChecked,
   },
 
+  // Relaja reglas estrictas en archivos de pruebas
+  {
+    files: ['**/__tests__/**/*.ts', '**/*.test.ts'],
+    rules: {
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+    },
+  },
+
   // Desactiva reglas que entran en conflicto con Prettier (debe ir al final)
   prettierConfig
 );
