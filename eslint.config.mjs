@@ -1,7 +1,6 @@
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import prettierConfig from 'eslint-config-prettier';
-import jestConfig from 'eslint-plugin-jest';
 
 export default tseslint.config(
   // Ignora carpetas comunes y archivos de configuración
