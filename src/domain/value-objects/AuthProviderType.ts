@@ -5,7 +5,7 @@ export enum AuthProvider {
   GOOGLE = 'google',
 }
 
-export class ProviderId {
+export class AuthProviderType {
   private readonly provider: AuthProvider;
 
   constructor(value: AuthProvider) {
@@ -23,11 +23,11 @@ export class ProviderId {
     return this.provider;
   }
 
-  isProvider(provider: AuthProvider): boolean {
+  is(provider: AuthProvider): boolean {
     return this.provider === provider;
   }
 
-  equals(other: ProviderId): boolean {
+  equals(other: AuthProviderType): boolean {
     return this.provider === other.provider;
   }
 }

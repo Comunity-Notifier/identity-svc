@@ -4,8 +4,9 @@ import { Email } from '../value-objects/Email';
 import { Image } from '../value-objects/Image';
 import { CreatedAt } from '../value-objects/CreatedAt';
 import { UpdatedAt } from '../value-objects/UpdatedAt';
+import { Clock, SystemClock } from '../../shared/domain/time/Clock';
 
-export interface UserProps {
+interface UserProps {
   id: Id;
   name: Name;
   email: Email;
@@ -14,8 +15,20 @@ export interface UserProps {
   updatedAt: UpdatedAt;
 }
 
+interface UserPrimitives {
+  id: string;
+  name: string;
+  email: string;
+  image?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export class User {
-  constructor(private readonly props: UserProps) {}
+  constructor(
+    private readonly props: UserProps,
+    private readonly clock: Clock = new SystemClock()
+  ) {}
 
   update(fields: Partial<Pick<UserProps, 'name' | 'image'>>): void {
     let changed = false;
@@ -31,7 +44,7 @@ export class User {
     }
 
     if (changed) {
-      this.props.updatedAt = new UpdatedAt(new Date());
+      this.props.updatedAt = new UpdatedAt(this.clock.now());
     }
   }
 
@@ -57,5 +70,16 @@ export class User {
 
   get updatedAt(): UpdatedAt {
     return this.props.updatedAt;
+  }
+
+  toPrimitives(): UserPrimitives {
+    return {
+      id: this.props.id.toString(),
+      name: this.props.name.toString(),
+      email: this.props.email.toString(),
+      image: this.props.image?.toString(),
+      createdAt: this.props.createdAt.toISOString(),
+      updatedAt: this.props.updatedAt.toISOString(),
+    };
   }
 }

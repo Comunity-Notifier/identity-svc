@@ -1,6 +1,6 @@
 import { Account } from '../../../src/domain/entities/Account';
 import { Id } from '../../../src/domain/value-objects/Id';
-import { ProviderId, AuthProvider } from '../../../src/domain/value-objects/ProviderId';
+import { AuthProviderType, AuthProvider } from '../../../src/domain/value-objects/AuthProviderType';
 import { Password } from '../../../src/domain/value-objects/Password';
 import { CreatedAt } from '../../../src/domain/value-objects/CreatedAt';
 import { UpdatedAt } from '../../../src/domain/value-objects/UpdatedAt';
@@ -12,7 +12,7 @@ describe('Account Entity', () => {
     id: new Id('123e4567-e89b-12d3-a456-426614174000'),
     userId: new Id('123e4567-e89b-12d3-a456-426614174001'),
     accountId: new Id('123e4567-e89b-12d3-a456-426614174002'),
-    providerId: new ProviderId(AuthProvider.GOOGLE),
+    provider: new AuthProviderType(AuthProvider.GOOGLE),
     password: new Password('StrongPass1', false),
     createdAt: new CreatedAt(now),
     updatedAt: new UpdatedAt(now),
@@ -24,7 +24,7 @@ describe('Account Entity', () => {
     expect(account.id.equals(props.id)).toBe(true);
     expect(account.userId.equals(props.userId)).toBe(true);
     expect(account.accountId.equals(props.accountId)).toBe(true);
-    expect(account.providerId.equals(props.providerId)).toBe(true);
+    expect(account.provider.equals(props.provider)).toBe(true);
     expect(account.password?.equals(props.password)).toBe(true);
     expect(account.createdAt.equals(props.createdAt)).toBe(true);
     expect(account.updatedAt.equals(props.updatedAt)).toBe(true);
