@@ -1,6 +1,7 @@
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import prettierConfig from 'eslint-config-prettier';
+import jestConfig from 'eslint-plugin-jest';
 
 export default tseslint.config(
   // Ignora carpetas comunes y archivos de configuración
@@ -33,6 +34,7 @@ export default tseslint.config(
         tsconfigRootDir: import.meta.dirname,
       },
     },
+
     rules: {
       // Reglas personalizadas para Express
       '@typescript-eslint/no-unused-vars': [
@@ -50,7 +52,6 @@ export default tseslint.config(
       '@typescript-eslint/await-thenable': 'error',
       '@typescript-eslint/no-unsafe-assignment': 'warn',
       '@typescript-eslint/no-unsafe-member-access': 'warn',
-      '@typescript-eslint/no-unsafe-call': 'warn',
 
       // Reglas generales
       'no-console': ['warn', { allow: ['warn', 'error'] }],
@@ -59,6 +60,12 @@ export default tseslint.config(
     },
   },
 
+  {
+    files: ['**/*.spec.ts', '**/*.test.ts'],
+    rules: {
+      '@typescript-eslint/unbound-method': 'off', // solo en tests
+    },
+  },
   // Configuración para archivos JavaScript (si los tienes)
   {
     files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
