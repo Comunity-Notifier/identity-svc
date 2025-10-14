@@ -6,6 +6,7 @@ import { Image } from '../../../src/domain/value-objects/Image';
 import { CreatedAt } from '../../../src/domain/value-objects/CreatedAt';
 import { UpdatedAt } from '../../../src/domain/value-objects/UpdatedAt';
 import { Clock } from '../../../src/shared/domain/time/Clock';
+import { Password } from '../../../src/domain/value-objects/Password';
 
 describe('User Entity', () => {
   const now = new Date('2025-10-10T10:00:00Z');
@@ -31,6 +32,7 @@ describe('User Entity', () => {
     name: new Name('Henry'),
     email: new Email('henry@example.com'),
     image: new Image('https://example.com/avatar.png'),
+    passwordHash: new Password('12345678'),
     createdAt: new CreatedAt(now),
     updatedAt: new UpdatedAt(now),
   });
@@ -44,6 +46,7 @@ describe('User Entity', () => {
     expect(user.image?.equals(props.image)).toBe(true);
     expect(user.createdAt.equals(props.createdAt)).toBe(true);
     expect(user.updatedAt.equals(props.updatedAt)).toBe(true);
+    expect(user.passwordHash.equals(props.passwordHash)).toBe(true);
   });
 
   it('should return primitives', () => {
@@ -56,6 +59,7 @@ describe('User Entity', () => {
       image: 'https://example.com/avatar.png',
       createdAt: now.toISOString(),
       updatedAt: now.toISOString(),
+      passwordHash: '12345678',
     });
   });
 

@@ -13,7 +13,7 @@ describe('Account Entity', () => {
     userId: new Id('123e4567-e89b-12d3-a456-426614174001'),
     accountId: new Id('123e4567-e89b-12d3-a456-426614174002'),
     provider: new AuthProviderType(AuthProvider.GOOGLE),
-    password: new Password('StrongPass1', false),
+    password: new Password('StrongPass1'),
     createdAt: new CreatedAt(now),
     updatedAt: new UpdatedAt(now),
   };
