@@ -17,11 +17,22 @@ interface UserProps {
   updatedAt: UpdatedAt;
 }
 
+interface UserAccountPrimitive {
+  id: string;
+  userId: string;
+  provider: AuthProvider;
+  accountId: string;
+  email?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface UserPrimitives {
   id: string;
   name: string;
   email: string;
   image?: string;
+  passwordHash?: string;
   createdAt: string;
   updatedAt: string;
   passwordHash: string;
@@ -39,7 +50,9 @@ export class User {
   constructor(
     private readonly props: UserProps,
     private readonly clock: Clock = new SystemClock()
-  ) {}
+  ) {
+    this.ensureAccountsBelongToUser();
+  }
 
   static create(props: UserCreateProps, opts: { clock?: Clock } = {}): User {
     const clock = opts.clock ?? new SystemClock();
@@ -102,6 +115,10 @@ export class User {
     return this.props.image;
   }
 
+  get accounts(): Account[] {
+    return [...this.props.accounts];
+  }
+
   get createdAt(): CreatedAt {
     return this.props.createdAt;
   }
@@ -116,9 +133,45 @@ export class User {
       name: this.props.name.toString(),
       email: this.props.email.toString(),
       image: this.props.image?.toString(),
+      passwordHash: this.props.password?.toString(),
       createdAt: this.props.createdAt.toISOString(),
       updatedAt: this.props.updatedAt.toISOString(),
       passwordHash: this.props.passwordHash.toString(),
     };
+  }
+
+  static fromPrimitives(props: UserPrimitives, clock: Clock = new SystemClock()): User {
+    return new User(
+      {
+        id: new Id(props.id),
+        name: new Name(props.name),
+        email: new Email(props.email),
+        image: props.image ? new Image(props.image) : undefined,
+        password: props.passwordHash ? new Password(props.passwordHash, true) : undefined,
+        accounts: props.accounts.map(
+          (account) =>
+            new Account({
+              id: new Id(account.id),
+              userId: new Id(account.userId),
+              provider: new AuthProviderType(account.provider),
+              accountId: new AccountExternalId(account.accountId),
+              email: account.email ? new Email(account.email) : undefined,
+              createdAt: new CreatedAt(new Date(account.createdAt)),
+              updatedAt: new UpdatedAt(new Date(account.updatedAt)),
+            })
+        ),
+        createdAt: new CreatedAt(new Date(props.createdAt)),
+        updatedAt: new UpdatedAt(new Date(props.updatedAt)),
+      },
+      clock
+    );
+  }
+
+  private ensureAccountsBelongToUser(): void {
+    for (const account of this.props.accounts) {
+      if (!account.userId.equals(this.props.id)) {
+        throw new Error('UserAccountOwnerMismatch');
+      }
+    }
   }
 }

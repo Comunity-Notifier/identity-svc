@@ -94,6 +94,9 @@ describe('User Entity', () => {
     expect(user.name.equals(props.name)).toBe(true);
     expect(user.email.equals(props.email)).toBe(true);
     expect(user.image?.equals(props.image)).toBe(true);
+    expect(user.password?.equals(props.password)).toBe(true);
+    expect(user.accounts).toHaveLength(1);
+    expect(user.accounts[0].equals(props.accounts[0])).toBe(true);
     expect(user.createdAt.equals(props.createdAt)).toBe(true);
     expect(user.updatedAt.equals(props.updatedAt)).toBe(true);
     expect(user.passwordHash.equals(props.passwordHash)).toBe(true);
@@ -107,6 +110,7 @@ describe('User Entity', () => {
       name: 'Henry',
       email: 'henry@example.com',
       image: 'https://example.com/avatar.png',
+      passwordHash: 'hashed-password',
       createdAt: now.toISOString(),
       updatedAt: now.toISOString(),
       passwordHash: '12345678',
