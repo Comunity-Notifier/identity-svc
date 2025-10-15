@@ -1,7 +1,7 @@
 import { Account } from '../../../src/domain/entities/Account';
 import { Id } from '../../../src/domain/value-objects/Id';
 import { AuthProviderType, AuthProvider } from '../../../src/domain/value-objects/AuthProviderType';
-import { Password } from '../../../src/domain/value-objects/Password';
+import { PasswordHash } from '../../../src/domain/value-objects/PasswordHash';
 import { CreatedAt } from '../../../src/domain/value-objects/CreatedAt';
 import { UpdatedAt } from '../../../src/domain/value-objects/UpdatedAt';
 
@@ -13,7 +13,7 @@ describe('Account Entity', () => {
     userId: new Id('123e4567-e89b-12d3-a456-426614174001'),
     accountId: new Id('123e4567-e89b-12d3-a456-426614174002'),
     provider: new AuthProviderType(AuthProvider.GOOGLE),
-    password: new Password('StrongPass1', false),
+    password: new PasswordHash('StrongPass1'),
     createdAt: new CreatedAt(now),
     updatedAt: new UpdatedAt(now),
   };

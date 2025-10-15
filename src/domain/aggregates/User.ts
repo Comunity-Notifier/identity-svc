@@ -5,12 +5,14 @@ import { Image } from '../value-objects/Image';
 import { CreatedAt } from '../value-objects/CreatedAt';
 import { UpdatedAt } from '../value-objects/UpdatedAt';
 import { Clock, SystemClock } from '../../shared/domain/time/Clock';
+import { PasswordHash } from '../value-objects/PasswordHash';
 
 interface UserProps {
   id: Id;
   name: Name;
   email: Email;
   image?: Image;
+  passwordHash: PasswordHash;
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;
 }
@@ -22,6 +24,7 @@ interface UserPrimitives {
   image?: string;
   createdAt: string;
   updatedAt: string;
+  passwordHash: string;
 }
 
 export class User {
@@ -30,7 +33,7 @@ export class User {
     private readonly clock: Clock = new SystemClock()
   ) {}
 
-  update(fields: Partial<Pick<UserProps, 'name' | 'image'>>): void {
+  update(fields: Partial<Pick<UserProps, 'name' | 'image' | 'passwordHash'>>): void {
     let changed = false;
 
     if (fields.name && !this.props.name.equals(fields.name)) {
@@ -40,6 +43,11 @@ export class User {
 
     if (fields.image && !this.props.image?.equals(fields.image)) {
       this.props.image = fields.image;
+      changed = true;
+    }
+
+    if (fields.passwordHash && !this.props.passwordHash.equals(fields.passwordHash)) {
+      this.props.passwordHash = fields.passwordHash;
       changed = true;
     }
 
@@ -58,6 +66,10 @@ export class User {
 
   get email(): Email {
     return this.props.email;
+  }
+
+  get passwordHash(): PasswordHash {
+    return this.props.passwordHash;
   }
 
   get image(): Image | undefined {
@@ -80,6 +92,7 @@ export class User {
       image: this.props.image?.toString(),
       createdAt: this.props.createdAt.toISOString(),
       updatedAt: this.props.updatedAt.toISOString(),
+      passwordHash: this.props.passwordHash.toString(),
     };
   }
 }
