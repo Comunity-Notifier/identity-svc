@@ -27,11 +27,37 @@ interface UserPrimitives {
   passwordHash: string;
 }
 
+interface UserCreateProps {
+  id: string;
+  name: string;
+  email: string;
+  passwordHash: string;
+  image?: string;
+}
+
 export class User {
   constructor(
     private readonly props: UserProps,
     private readonly clock: Clock = new SystemClock()
   ) {}
+
+  static create(props: UserCreateProps, opts: { clock?: Clock } = {}): User {
+    const clock = opts.clock ?? new SystemClock();
+    const now = clock.now();
+
+    return new User(
+      {
+        id: new Id(props.id),
+        name: new Name(props.name),
+        email: new Email(props.email),
+        image: props.image ? new Image(props.image) : undefined,
+        passwordHash: new Password(props.passwordHash),
+        createdAt: new CreatedAt(now),
+        updatedAt: new UpdatedAt(now),
+      },
+      clock
+    );
+  }
 
   update(fields: Partial<Pick<UserProps, 'name' | 'image' | 'passwordHash'>>): void {
     let changed = false;

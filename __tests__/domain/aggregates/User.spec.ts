@@ -11,6 +11,10 @@ import { PasswordHash } from '../../../src/domain/value-objects/PasswordHash';
 describe('User Entity', () => {
   const now = new Date('2025-10-10T10:00:00Z');
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   class FixedClock implements Clock {
     private current: Date;
 
@@ -35,6 +39,52 @@ describe('User Entity', () => {
     passwordHash: new PasswordHash('12345678'),
     createdAt: new CreatedAt(now),
     updatedAt: new UpdatedAt(now),
+  });
+
+  it('should create a user from primitives using system clock', () => {
+    const creationDate = new Date('2024-01-01T00:00:00Z');
+    const clockSpy = jest.spyOn(SystemClock.prototype, 'now').mockReturnValue(creationDate);
+
+    const user = User.create({
+      id: 'a3c3b55d-6ecd-4a31-8eac-3f8cb36b75c0',
+      name: 'Alice',
+      email: 'alice@example.com',
+      passwordHash: 'hashed-password',
+      image: 'https://example.com/avatar.png',
+    });
+
+    expect(clockSpy).toHaveBeenCalledTimes(1);
+    expect(user.id.toString()).toBe('a3c3b55d-6ecd-4a31-8eac-3f8cb36b75c0');
+    expect(user.name.toString()).toBe('Alice');
+    expect(user.email.toString()).toBe('alice@example.com');
+    expect(user.passwordHash.toString()).toBe('hashed-password');
+    expect(user.image?.toString()).toBe('https://example.com/avatar.png');
+    expect(user.createdAt.toISOString()).toBe(creationDate.toISOString());
+    expect(user.updatedAt.toISOString()).toBe(creationDate.toISOString());
+  });
+
+  it('should allow providing a custom clock when creating the user', () => {
+    const clock = new FixedClock(now);
+
+    const user = User.create(
+      {
+        id: 'b7ab5db3-5e1a-4740-833a-0f5f9c70efbc',
+        name: 'Henry',
+        email: 'henry@example.com',
+        passwordHash: 'hashed-password',
+      },
+      { clock }
+    );
+
+    expect(user.createdAt.toISOString()).toBe(now.toISOString());
+    expect(user.updatedAt.toISOString()).toBe(now.toISOString());
+
+    const newName = new Name('Henri');
+    clock.tick(2000);
+    user.update({ name: newName });
+
+    expect(user.name.equals(newName)).toBe(true);
+    expect(user.updatedAt.toISOString()).toBe(clock.now().toISOString());
   });
 
   it('should expose all props via getters', () => {
