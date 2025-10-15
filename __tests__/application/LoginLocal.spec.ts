@@ -9,7 +9,7 @@ import { Name } from '../../src/domain/value-objects/Name';
 import { Id } from '../../src/domain/value-objects/Id';
 import { CreatedAt } from '../../src/domain/value-objects/CreatedAt';
 import { UpdatedAt } from '../../src/domain/value-objects/UpdatedAt';
-import { Password } from '../../src/domain/value-objects/Password';
+import { PasswordHash } from '../../src/domain/value-objects/PasswordHash';
 
 describe('LoginUserLocal', () => {
   const mockUserRepository = {
@@ -55,7 +55,7 @@ describe('LoginUserLocal', () => {
       email: new Email('test@example.com'),
       createdAt: new CreatedAt(new Date()),
       updatedAt: new UpdatedAt(new Date()),
-      passwordHash: new Password('hashPassword'),
+      passwordHash: new PasswordHash('hashPassword'),
     });
 
     mockUserRepository.findByEmail.mockResolvedValue(fakeUser);
@@ -73,7 +73,7 @@ describe('LoginUserLocal', () => {
       email: new Email('test@example.com'),
       createdAt: new CreatedAt(new Date()),
       updatedAt: new UpdatedAt(new Date()),
-      passwordHash: new Password('hashPassword'),
+      passwordHash: new PasswordHash('hashPassword'),
     });
 
     const token = 'token1234';

@@ -6,7 +6,7 @@ import { Image } from '../../../src/domain/value-objects/Image';
 import { CreatedAt } from '../../../src/domain/value-objects/CreatedAt';
 import { UpdatedAt } from '../../../src/domain/value-objects/UpdatedAt';
 import { Clock } from '../../../src/shared/domain/time/Clock';
-import { Password } from '../../../src/domain/value-objects/Password';
+import { PasswordHash } from '../../../src/domain/value-objects/PasswordHash';
 
 describe('User Entity', () => {
   const now = new Date('2025-10-10T10:00:00Z');
@@ -32,7 +32,7 @@ describe('User Entity', () => {
     name: new Name('Henry'),
     email: new Email('henry@example.com'),
     image: new Image('https://example.com/avatar.png'),
-    passwordHash: new Password('12345678'),
+    passwordHash: new PasswordHash('12345678'),
     createdAt: new CreatedAt(now),
     updatedAt: new UpdatedAt(now),
   });

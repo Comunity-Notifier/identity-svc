@@ -1,6 +1,6 @@
 import { Id } from '../value-objects/Id';
 import { AuthProviderType } from '../value-objects/AuthProviderType';
-import { Password } from '../value-objects/Password';
+import { PasswordHash } from '../value-objects/PasswordHash';
 import { CreatedAt } from '../value-objects/CreatedAt';
 import { UpdatedAt } from '../value-objects/UpdatedAt';
 
@@ -9,7 +9,7 @@ export interface AccountProps {
   userId: Id;
   accountId: Id;
   provider: AuthProviderType;
-  password?: Password;
+  password?: PasswordHash;
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;
 }
@@ -33,7 +33,7 @@ export class Account {
     return this.props.provider;
   }
 
-  get password(): Password | undefined {
+  get password(): PasswordHash | undefined {
     return this.props.password;
   }
 

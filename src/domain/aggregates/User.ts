@@ -5,14 +5,14 @@ import { Image } from '../value-objects/Image';
 import { CreatedAt } from '../value-objects/CreatedAt';
 import { UpdatedAt } from '../value-objects/UpdatedAt';
 import { Clock, SystemClock } from '../../shared/domain/time/Clock';
-import { Password } from '../value-objects/Password';
+import { PasswordHash } from '../value-objects/PasswordHash';
 
 interface UserProps {
   id: Id;
   name: Name;
   email: Email;
   image?: Image;
-  passwordHash: Password;
+  passwordHash: PasswordHash;
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;
 }
@@ -68,7 +68,7 @@ export class User {
     return this.props.email;
   }
 
-  get passwordHash(): Password {
+  get passwordHash(): PasswordHash {
     return this.props.passwordHash;
   }
 
