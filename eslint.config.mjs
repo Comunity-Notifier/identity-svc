@@ -33,6 +33,7 @@ export default tseslint.config(
         tsconfigRootDir: import.meta.dirname,
       },
     },
+
     rules: {
       // Reglas personalizadas para Express
       '@typescript-eslint/no-unused-vars': [
@@ -50,7 +51,6 @@ export default tseslint.config(
       '@typescript-eslint/await-thenable': 'error',
       '@typescript-eslint/no-unsafe-assignment': 'warn',
       '@typescript-eslint/no-unsafe-member-access': 'warn',
-      '@typescript-eslint/no-unsafe-call': 'warn',
 
       // Reglas generales
       'no-console': ['warn', { allow: ['warn', 'error'] }],
@@ -59,6 +59,12 @@ export default tseslint.config(
     },
   },
 
+  {
+    files: ['**/*.spec.ts', '**/*.test.ts'],
+    rules: {
+      '@typescript-eslint/unbound-method': 'off', // solo en tests
+    },
+  },
   // Configuración para archivos JavaScript (si los tienes)
   {
     files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
