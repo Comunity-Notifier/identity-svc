@@ -5,7 +5,7 @@ import { Email } from '../../../src/domain/value-objects/Email';
 import { Image } from '../../../src/domain/value-objects/Image';
 import { CreatedAt } from '../../../src/domain/value-objects/CreatedAt';
 import { UpdatedAt } from '../../../src/domain/value-objects/UpdatedAt';
-import { Clock } from '../../../src/shared/domain/time/Clock';
+import { Clock, SystemClock } from '../../../src/shared/domain/time/Clock';
 import { PasswordHash } from '../../../src/domain/value-objects/PasswordHash';
 
 describe('User Entity', () => {
@@ -41,16 +41,16 @@ describe('User Entity', () => {
     updatedAt: new UpdatedAt(now),
   });
 
-  it('should create a user from primitives using system clock', () => {
+  it('should create a user from value objects using system clock', () => {
     const creationDate = new Date('2024-01-01T00:00:00Z');
     const clockSpy = jest.spyOn(SystemClock.prototype, 'now').mockReturnValue(creationDate);
 
     const user = User.create({
-      id: 'a3c3b55d-6ecd-4a31-8eac-3f8cb36b75c0',
-      name: 'Alice',
-      email: 'alice@example.com',
-      passwordHash: 'hashed-password',
-      image: 'https://example.com/avatar.png',
+      id: new Id('a3c3b55d-6ecd-4a31-8eac-3f8cb36b75c0'),
+      name: new Name('Alice'),
+      email: new Email('alice@example.com'),
+      passwordHash: new PasswordHash('hashed-password'),
+      image: new Image('https://example.com/avatar.png'),
     });
 
     expect(clockSpy).toHaveBeenCalledTimes(1);
@@ -68,10 +68,10 @@ describe('User Entity', () => {
 
     const user = User.create(
       {
-        id: 'b7ab5db3-5e1a-4740-833a-0f5f9c70efbc',
-        name: 'Henry',
-        email: 'henry@example.com',
-        passwordHash: 'hashed-password',
+        id: new Id('b7ab5db3-5e1a-4740-833a-0f5f9c70efbc'),
+        name: new Name('Henry'),
+        email: new Email('henry@example.com'),
+        passwordHash: new PasswordHash('hashed-password'),
       },
       { clock }
     );

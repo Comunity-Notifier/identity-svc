@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/unbound-method */
-
 import { RegisterLocalUser } from '../../src/application/use-cases/RegisterLocalUser';
 import { UserRepository } from '../../src/domain/repositories/UserRepository';
 import { PasswordHasher } from '../../src/application/ports/PasswordHasher';
@@ -46,7 +44,12 @@ describe('RegisterLocalUser', () => {
     findByEmailMock.mockResolvedValue({} as User);
 
     await expect(
-      useCase.execute({ name: 'Jane', email: 'jane@example.com', password: 'Secret123' })
+      useCase.execute({
+        id: 'ffb9d9b7-2906-4a7c-944b-0db62f764a32',
+        name: 'Jane',
+        email: 'jane@example.com',
+        password: 'Secret123',
+      })
     ).rejects.toThrow(UserAlreadyExistsError);
 
     expect(findByEmailMock).toHaveBeenCalledWith(new Email('jane@example.com'));
@@ -68,6 +71,7 @@ describe('RegisterLocalUser', () => {
     hashMock.mockResolvedValue('hashed-password');
 
     const result = await useCase.execute({
+      id: 'ffb9d9b7-2906-4a7c-944b-0db62f764a32',
       name: 'Jane Doe',
       email: 'jane@example.com',
       password: 'Secret123',
@@ -80,9 +84,7 @@ describe('RegisterLocalUser', () => {
 
     const savedUser = saveMock.mock.calls[0][0];
     expect(savedUser).toBeInstanceOf(User);
-    expect(savedUser.id.toString()).toMatch(
-      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-    );
+    expect(savedUser.id.toString()).toBe('ffb9d9b7-2906-4a7c-944b-0db62f764a32');
     expect(savedUser.email.equals(new Email('jane@example.com'))).toBe(true);
     expect(savedUser.passwordHash.toString()).toBe('hashed-password');
 
@@ -93,5 +95,3 @@ describe('RegisterLocalUser', () => {
     });
   });
 });
-
-/* eslint-enable @typescript-eslint/unbound-method */

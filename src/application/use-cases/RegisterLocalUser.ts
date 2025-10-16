@@ -1,4 +1,3 @@
-import { randomUUID } from 'crypto';
 import { UserRepository } from '../../domain/repositories/UserRepository';
 import { RegisterLocalUserRequest, RegisterLocalUserResult } from '../dto';
 import { Email } from '../../domain/value-objects/Email';
@@ -6,6 +5,11 @@ import { User } from '../../domain/aggregates/User';
 import { PasswordHasher } from '../ports/PasswordHasher';
 import { UserAlreadyExistsError } from '../../domain/errors/domain/UserAlreadyExistsError';
 import { Clock, SystemClock } from '../../shared/domain/time/Clock';
+import { Name } from '../../domain/value-objects/Name';
+import { Image } from '../../domain/value-objects/Image';
+import { PasswordPlain } from '../../domain/value-objects/PasswordPlain';
+import { PasswordHash } from '../../domain/value-objects/PasswordHash';
+import { Id } from '../../domain/value-objects/Id';
 
 export interface RegisterLocalUserDeps {
   userRepository: UserRepository;
@@ -25,18 +29,23 @@ export class RegisterLocalUser {
 
     const existing = await this.deps.userRepository.findByEmail(email);
     if (existing) {
-      throw new UserAlreadyExistsError(request.email);
+      throw new UserAlreadyExistsError(email.toString());
     }
 
-    const hashedPassword = await this.deps.passwordHasher.hash(request.password);
+    const id = new Id(request.id);
+    const name = new Name(request.name);
+    const image = request.image ? new Image(request.image) : undefined;
+    const plainPassword = new PasswordPlain(request.password);
+    const hashedPassword = await this.deps.passwordHasher.hash(plainPassword.toString());
+    const passwordHash = new PasswordHash(hashedPassword);
 
     const user = User.create(
       {
-        id: randomUUID(),
-        name: request.name,
-        email: email.toString(),
-        passwordHash: hashedPassword,
-        image: request.image,
+        id,
+        name,
+        email,
+        passwordHash,
+        image,
       },
       { clock: this.clock }
     );

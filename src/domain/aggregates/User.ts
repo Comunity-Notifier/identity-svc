@@ -28,11 +28,11 @@ interface UserPrimitives {
 }
 
 interface UserCreateProps {
-  id: string;
-  name: string;
-  email: string;
-  passwordHash: string;
-  image?: string;
+  id: Id;
+  name: Name;
+  email: Email;
+  passwordHash: PasswordHash;
+  image?: Image;
 }
 
 export class User {
@@ -47,11 +47,11 @@ export class User {
 
     return new User(
       {
-        id: new Id(props.id),
-        name: new Name(props.name),
-        email: new Email(props.email),
-        image: props.image ? new Image(props.image) : undefined,
-        passwordHash: new Password(props.passwordHash),
+        id: props.id,
+        name: props.name,
+        email: props.email,
+        image: props.image,
+        passwordHash: props.passwordHash,
         createdAt: new CreatedAt(now),
         updatedAt: new UpdatedAt(now),
       },
