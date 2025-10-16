@@ -1,5 +1,5 @@
-import { UpdatedAt } from '../../../src/domain/value-objects/UpdatedAt';
-import { InvalidFormatError } from '../../../src/domain/errors/value-objects/InvalidFormatError';
+import { UpdatedAt } from 'src/domain/value-objects/UpdatedAt';
+import { InvalidFormatError } from 'src/domain/errors/value-objects/InvalidFormatError';
 
 describe('UpdatedAt Value Object', () => {
   it('should create a valid date', () => {

@@ -23,6 +23,9 @@ export class LoginLocal {
     }
 
     const passwordHash = user.passwordHash;
+    if (!passwordHash) {
+      throw new InvalidCredentialsError();
+    }
 
     const isValid = await this.deps.passwordHasher.compare(
       request.password,

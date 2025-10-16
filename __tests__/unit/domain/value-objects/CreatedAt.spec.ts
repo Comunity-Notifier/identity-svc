@@ -1,5 +1,5 @@
-import { CreatedAt } from '../../../src/domain/value-objects/CreatedAt';
-import { InvalidFormatError } from '../../../src/domain/errors/value-objects/InvalidFormatError';
+import { CreatedAt } from 'src/domain/value-objects/CreatedAt';
+import { InvalidFormatError } from 'src/domain/errors/value-objects/InvalidFormatError';
 
 describe('CreatedAt Value Object', () => {
   it('should create a valid date', () => {

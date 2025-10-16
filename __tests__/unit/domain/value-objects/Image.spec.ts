@@ -1,6 +1,6 @@
-import { Image } from '../../../src/domain/value-objects/Image';
-import { EmptyValueError } from '../../../src/domain/errors/value-objects/EmptyValueError';
-import { InvalidFormatError } from '../../../src/domain/errors/value-objects/InvalidFormatError';
+import { Image } from 'src/domain/value-objects/Image';
+import { EmptyValueError } from 'src/domain/errors/value-objects/EmptyValueError';
+import { InvalidFormatError } from 'src/domain/errors/value-objects/InvalidFormatError';
 
 describe('Image Value Object', () => {
   it('should create a valid image URL', () => {

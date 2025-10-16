@@ -39,16 +39,14 @@ export class RegisterLocalUser {
     const hashedPassword = await this.deps.passwordHasher.hash(plainPassword.toString());
     const passwordHash = new PasswordHash(hashedPassword);
 
-    const user = User.create(
-      {
-        id,
-        name,
-        email,
-        passwordHash,
-        image,
-      },
-      { clock: this.clock }
-    );
+    const user = User.create({
+      id,
+      name,
+      email,
+      passwordHash,
+      image,
+      clock: this.clock,
+    });
 
     await this.deps.userRepository.save(user);
 
