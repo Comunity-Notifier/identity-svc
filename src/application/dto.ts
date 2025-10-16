@@ -23,3 +23,7 @@ export interface RegisterLocalUserResult {
   name: string;
   email: string;
 }
+
+export interface RegisterAndLoginLocalResult extends RegisterLocalUserResult {
+  accessToken: string;
+}
