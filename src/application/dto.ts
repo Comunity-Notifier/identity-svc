@@ -11,6 +11,7 @@ export interface LoginLocalRequest {
 }
 
 export interface RegisterLocalUserRequest {
+  id: string;
   name: string;
   email: string;
   password: string;
