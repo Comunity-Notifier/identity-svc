@@ -1,6 +1,11 @@
 import type { Request, Response, NextFunction } from 'express';
 import { ZodError } from 'zod';
 import { createErrorResponse } from './api-response';
+import { InvalidCredentialsError } from '../domain/errors/domain/InvalidCredentialsError';
+import { UserAlreadyExistsError } from '../domain/errors/domain/UserAlreadyExistsError';
+import { UserNotFoundError } from '../domain/errors/domain/UserNotFoundError';
+import { EmptyValueError } from '../domain/errors/value-objects/EmptyValueError';
+import { InvalidFormatError } from '../domain/errors/value-objects/InvalidFormatError';
 
 interface ErrorResponseBody {
   error: {
@@ -13,7 +18,13 @@ class DomainError extends Error {}
 
 type DomainErrorConstructor = new (...args: string[]) => DomainError;
 
-const DOMAIN_STATUS: [DomainErrorConstructor, number][] = [];
+const DOMAIN_STATUS: [DomainErrorConstructor, number][] = [
+  [InvalidCredentialsError, 401],
+  [UserNotFoundError, 404],
+  [UserAlreadyExistsError, 409],
+  [EmptyValueError, 400],
+  [InvalidFormatError, 400],
+];
 
 export const asyncHandler =
   <T extends Request, U extends Response>(handler: (req: T, res: U) => Promise<void>) =>

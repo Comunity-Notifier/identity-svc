@@ -17,3 +17,5 @@ export const loginSchemaResponse = z.object({
   id: z.uuid('id must be a valid UUID'),
   name: z.string().min(1, 'name is required'),
 });
+
+export type LoginLocalResponseDto = z.infer<typeof loginSchemaResponse>;

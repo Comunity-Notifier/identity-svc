@@ -6,7 +6,7 @@ import { errorHandler } from './errors';
 import { createErrorResponse } from './api-response';
 import swaggerUi from 'swagger-ui-express';
 import { documentZod } from './documentation';
-import { createIdentityRouter } from './routes/identity';
+// import { createIdentityRouter } from './routes/identity';
 
 export const createApp = async () => {
   const app = express();
@@ -23,8 +23,8 @@ export const createApp = async () => {
     res.status(200).json({ status: 'ok' });
   });
 
-  const identityRouter = await createIdentityRouter({});
-  app.use('/identity', identityRouter);
+  // const identityRouter = createIdentityRouter({});
+  // app.use('/identity', identityRouter);
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(documentZod));
 
   app.use((_req, res) => {
