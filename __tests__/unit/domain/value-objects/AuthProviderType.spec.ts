@@ -1,5 +1,5 @@
-import { AuthProviderType, AuthProvider } from '../../../src/domain/value-objects/AuthProviderType';
-import { InvalidFormatError } from '../../../src/domain/errors/value-objects/InvalidFormatError';
+import { AuthProviderType, AuthProvider } from 'src/domain/value-objects/AuthProviderType';
+import { InvalidFormatError } from 'src/domain/errors/value-objects/InvalidFormatError';
 
 describe('AuthProviderType Value Object', () => {
   it('should create a valid provider with GOOGLE', () => {

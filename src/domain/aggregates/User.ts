@@ -1,3 +1,4 @@
+import { Account } from '../entities/Account';
 import { Id } from '../value-objects/Id';
 import { Name } from '../value-objects/Name';
 import { Email } from '../value-objects/Email';
@@ -6,13 +7,16 @@ import { CreatedAt } from '../value-objects/CreatedAt';
 import { UpdatedAt } from '../value-objects/UpdatedAt';
 import { Clock, SystemClock } from '../../shared/domain/time/Clock';
 import { PasswordHash } from '../value-objects/PasswordHash';
+import { AuthProvider, AuthProviderType } from '../value-objects/AuthProviderType';
+import { AccountExternalId } from '../value-objects/AccountExternalId';
 
 interface UserProps {
   id: Id;
   name: Name;
   email: Email;
+  passwordHash?: PasswordHash;
   image?: Image;
-  passwordHash: PasswordHash;
+  accounts: Account[];
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;
 }
@@ -27,23 +31,25 @@ interface UserAccountPrimitive {
   updatedAt: string;
 }
 
-interface UserPrimitives {
+export interface UserPrimitives {
   id: string;
   name: string;
   email: string;
-  image?: string;
   passwordHash?: string;
+  image?: string;
   createdAt: string;
   updatedAt: string;
-  passwordHash: string;
+  accounts: UserAccountPrimitive[];
 }
 
-interface UserCreateProps {
+export interface CreateUserProps {
   id: Id;
   name: Name;
   email: Email;
-  passwordHash: PasswordHash;
+  passwordHash?: PasswordHash;
   image?: Image;
+  accounts?: Account[];
+  clock?: Clock;
 }
 
 export class User {
@@ -54,21 +60,30 @@ export class User {
     this.ensureAccountsBelongToUser();
   }
 
-  static create(props: UserCreateProps, opts: { clock?: Clock } = {}): User {
-    const clock = opts.clock ?? new SystemClock();
-    const now = clock.now();
+  static create({
+    id,
+    name,
+    email,
+    passwordHash,
+    image,
+    accounts = [],
+    clock,
+  }: CreateUserProps): User {
+    const effectiveClock = clock ?? new SystemClock();
+    const now = effectiveClock.now();
 
     return new User(
       {
-        id: props.id,
-        name: props.name,
-        email: props.email,
-        image: props.image,
-        passwordHash: props.passwordHash,
+        id,
+        name,
+        email,
+        passwordHash,
+        image,
+        accounts,
         createdAt: new CreatedAt(now),
         updatedAt: new UpdatedAt(now),
       },
-      clock
+      effectiveClock
     );
   }
 
@@ -85,7 +100,7 @@ export class User {
       changed = true;
     }
 
-    if (fields.passwordHash && !this.props.passwordHash.equals(fields.passwordHash)) {
+    if (fields.passwordHash && !this.props.passwordHash?.equals(fields.passwordHash)) {
       this.props.passwordHash = fields.passwordHash;
       changed = true;
     }
@@ -107,7 +122,7 @@ export class User {
     return this.props.email;
   }
 
-  get passwordHash(): PasswordHash {
+  get passwordHash(): PasswordHash | undefined {
     return this.props.passwordHash;
   }
 
@@ -132,23 +147,25 @@ export class User {
       id: this.props.id.toString(),
       name: this.props.name.toString(),
       email: this.props.email.toString(),
+      passwordHash: this.props.passwordHash?.toString(),
       image: this.props.image?.toString(),
-      passwordHash: this.props.password?.toString(),
       createdAt: this.props.createdAt.toISOString(),
       updatedAt: this.props.updatedAt.toISOString(),
-      passwordHash: this.props.passwordHash.toString(),
+      accounts: this.props.accounts.map((account) => account.toPrimitives()),
     };
   }
 
-  static fromPrimitives(props: UserPrimitives, clock: Clock = new SystemClock()): User {
+  static fromPrimitives(primitives: UserPrimitives, clock: Clock = new SystemClock()): User {
     return new User(
       {
-        id: new Id(props.id),
-        name: new Name(props.name),
-        email: new Email(props.email),
-        image: props.image ? new Image(props.image) : undefined,
-        password: props.passwordHash ? new Password(props.passwordHash, true) : undefined,
-        accounts: props.accounts.map(
+        id: new Id(primitives.id),
+        name: new Name(primitives.name),
+        email: new Email(primitives.email),
+        passwordHash: primitives.passwordHash
+          ? new PasswordHash(primitives.passwordHash)
+          : undefined,
+        image: primitives.image ? new Image(primitives.image) : undefined,
+        accounts: primitives.accounts.map(
           (account) =>
             new Account({
               id: new Id(account.id),
@@ -160,8 +177,8 @@ export class User {
               updatedAt: new UpdatedAt(new Date(account.updatedAt)),
             })
         ),
-        createdAt: new CreatedAt(new Date(props.createdAt)),
-        updatedAt: new UpdatedAt(new Date(props.updatedAt)),
+        createdAt: new CreatedAt(new Date(primitives.createdAt)),
+        updatedAt: new UpdatedAt(new Date(primitives.updatedAt)),
       },
       clock
     );

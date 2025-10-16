@@ -1,6 +1,5 @@
 import { Id } from '../value-objects/Id';
-import { AuthProviderType } from '../value-objects/AuthProviderType';
-import { PasswordHash } from '../value-objects/PasswordHash';
+import { AuthProvider, AuthProviderType } from '../value-objects/AuthProviderType';
 import { CreatedAt } from '../value-objects/CreatedAt';
 import { UpdatedAt } from '../value-objects/UpdatedAt';
 import { AccountExternalId } from '../value-objects/AccountExternalId';
@@ -11,7 +10,7 @@ export interface AccountProps {
   userId: Id;
   accountId: AccountExternalId;
   provider: AuthProviderType;
-  password?: PasswordHash;
+  email?: Email;
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;
 }
@@ -35,8 +34,8 @@ export class Account {
     return this.props.provider;
   }
 
-  get password(): PasswordHash | undefined {
-    return this.props.password;
+  get email(): Email | undefined {
+    return this.props.email;
   }
 
   get createdAt(): CreatedAt {

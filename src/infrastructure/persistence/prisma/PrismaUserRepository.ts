@@ -8,7 +8,7 @@ import { Email } from 'src/domain/value-objects/Email';
 import { Image } from 'src/domain/value-objects/Image';
 import { CreatedAt } from 'src/domain/value-objects/CreatedAt';
 import { UpdatedAt } from 'src/domain/value-objects/UpdatedAt';
-import { Password } from 'src/domain/value-objects/Password';
+import { PasswordHash } from 'src/domain/value-objects/PasswordHash';
 import { AuthProvider, AuthProviderType } from 'src/domain/value-objects/AuthProviderType';
 import { AccountExternalId } from 'src/domain/value-objects/AccountExternalId';
 
@@ -29,8 +29,8 @@ function mapUser(prismaUser: PrismaUser & { accounts: PrismaAccount[] }): User {
     id: new Id(prismaUser.id),
     name: new Name(prismaUser.name),
     email: new Email(prismaUser.email),
+    passwordHash: prismaUser.passwordHash ? new PasswordHash(prismaUser.passwordHash) : undefined,
     image: prismaUser.image ? new Image(prismaUser.image) : undefined,
-    password: prismaUser.passwordHash ? new Password(prismaUser.passwordHash, true) : undefined,
     accounts: prismaUser.accounts.map(mapAccount),
     createdAt: new CreatedAt(prismaUser.createdAt),
     updatedAt: new UpdatedAt(prismaUser.updatedAt),
@@ -38,10 +38,7 @@ function mapUser(prismaUser: PrismaUser & { accounts: PrismaAccount[] }): User {
 }
 
 function isUniqueConstraintError(error: unknown): boolean {
-  if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-    return true;
-  }
-  return false;
+  return error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002';
 }
 
 function isEmailUniqueError(error: unknown): boolean {
@@ -170,7 +167,7 @@ export class PrismaUserRepository implements UserRepository {
             id: user.id.toString(),
             email: user.email.toString(),
             name: user.name.toString(),
-            passwordHash: user.password?.toString() ?? null,
+            passwordHash: user.passwordHash?.toString() ?? null,
             image: user.image?.toString() ?? null,
             createdAt: user.createdAt.toDate(),
             updatedAt: user.updatedAt.toDate(),
@@ -206,7 +203,7 @@ export class PrismaUserRepository implements UserRepository {
           data: {
             email: user.email.toString(),
             name: user.name.toString(),
-            passwordHash: user.password?.toString() ?? null,
+            passwordHash: user.passwordHash?.toString() ?? null,
             image: user.image?.toString() ?? null,
             updatedAt: user.updatedAt.toDate(),
           },

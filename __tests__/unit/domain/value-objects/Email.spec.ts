@@ -1,6 +1,6 @@
-import { Email } from '../../../src/domain/value-objects/Email';
-import { EmptyValueError } from '../../../src/domain/errors/value-objects/EmptyValueError';
-import { InvalidFormatError } from '../../../src/domain/errors/value-objects/InvalidFormatError';
+import { Email } from 'src/domain/value-objects/Email';
+import { EmptyValueError } from 'src/domain/errors/value-objects/EmptyValueError';
+import { InvalidFormatError } from 'src/domain/errors/value-objects/InvalidFormatError';
 
 describe('Email Value Object', () => {
   it('should create a valid email', () => {

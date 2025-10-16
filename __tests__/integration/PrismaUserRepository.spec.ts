@@ -8,13 +8,13 @@ import { Id } from 'src/domain/value-objects/Id';
 import { Name } from 'src/domain/value-objects/Name';
 import { Email as EmailVO } from 'src/domain/value-objects/Email';
 import { Image } from 'src/domain/value-objects/Image';
-import { Password } from 'src/domain/value-objects/Password';
 import { CreatedAt } from 'src/domain/value-objects/CreatedAt';
 import { UpdatedAt } from 'src/domain/value-objects/UpdatedAt';
 import { AuthProvider, AuthProviderType } from 'src/domain/value-objects/AuthProviderType';
 import { AccountExternalId } from 'src/domain/value-objects/AccountExternalId';
+import { PasswordHash } from 'src/domain/value-objects/PasswordHash';
 
-describe('UserRepositoryPg integration', () => {
+describe('PrismaUserRepository integration', () => {
   jest.setTimeout(120_000);
   let prisma: PrismaClient;
   let repository: PrismaUserRepository;
@@ -59,24 +59,21 @@ describe('UserRepositoryPg integration', () => {
     email = `user-${randomUUID()}@example.com`,
     name = 'Test User',
     image,
-    passwordHash = 'hashed-password',
+    passwordHash,
     accounts = [],
     createdAt = new Date(),
     updatedAt,
   }: UserOverrides = {}): User => {
     const userId = new Id(id);
-    const userCreatedAt = new CreatedAt(createdAt);
-    const userUpdatedAt = new UpdatedAt(updatedAt ?? createdAt);
-
     return new User({
       id: userId,
       name: new Name(name),
       email: new EmailVO(email),
+      passwordHash: passwordHash ? new PasswordHash(passwordHash) : undefined,
       image: image ? new Image(image) : undefined,
-      password: passwordHash ? new Password(passwordHash, true) : undefined,
       accounts: accounts.map((account) => buildAccount(userId, account)),
-      createdAt: userCreatedAt,
-      updatedAt: userUpdatedAt,
+      createdAt: new CreatedAt(createdAt),
+      updatedAt: new UpdatedAt(updatedAt ?? createdAt),
     });
   };
 
@@ -98,7 +95,7 @@ describe('UserRepositoryPg integration', () => {
     await prisma.user.deleteMany();
   });
 
-  it('save + findByEmail stores and retrieves a user without accounts', async () => {
+  it('persists and retrieves a user by email without accounts', async () => {
     const user = buildUser({ accounts: [] });
 
     await repository.save(user);
@@ -160,7 +157,7 @@ describe('UserRepositoryPg integration', () => {
     await expect(repository.save(user2)).rejects.toThrow('AccountAlreadyLinked');
   });
 
-  it('prevents constructing a user with accounts belonging to a different user', () => {
+  it('rejects constructing a user whose accounts belong to another user', () => {
     const userId = new Id(randomUUID());
     const otherUserId = new Id(randomUUID());
 
@@ -170,23 +167,14 @@ describe('UserRepositoryPg integration', () => {
           id: userId,
           name: new Name('Mismatch'),
           email: new EmailVO('mismatch@example.com'),
-          accounts: [
-            new Account({
-              id: new Id(randomUUID()),
-              userId: otherUserId,
-              provider: new AuthProviderType(AuthProvider.GOOGLE),
-              accountId: new AccountExternalId('google-123'),
-              createdAt: new CreatedAt(new Date()),
-              updatedAt: new UpdatedAt(new Date()),
-            }),
-          ],
+          accounts: [buildAccount(otherUserId)],
           createdAt: new CreatedAt(new Date()),
           updatedAt: new UpdatedAt(new Date()),
         })
     ).toThrow('UserAccountOwnerMismatch');
   });
 
-  it('update prevents changing email to an existing one', async () => {
+  it('prevents changing email to an existing one on update', async () => {
     const user1 = buildUser({ email: 'existing@example.com' });
     const user2 = buildUser({ email: 'other@example.com' });
 

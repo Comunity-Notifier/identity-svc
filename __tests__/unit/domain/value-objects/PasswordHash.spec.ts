@@ -1,4 +1,4 @@
-import { PasswordHash } from '../../../src/domain/value-objects/PasswordHash';
+import { PasswordHash } from 'src/domain/value-objects/PasswordHash';
 
 describe('Password Value Object', () => {
   it('should create a valid password', () => {
