@@ -1,8 +1,10 @@
+import { SignedTokenResult } from './ports/TokenService';
+
 export interface LoginLocalResult {
   id: string;
   email: string;
   name: string;
-  accessToken: string;
+  accessToken: SignedTokenResult;
 }
 
 export interface LoginLocalRequest {
@@ -25,5 +27,5 @@ export interface RegisterLocalUserResult {
 }
 
 export interface RegisterAndLoginLocalResult extends RegisterLocalUserResult {
-  accessToken: string;
+  accessToken: SignedTokenResult;
 }

@@ -1,6 +1,6 @@
-import { RegisterAndLoginLocal } from '../../src/application/use-cases/RegisterAndLoginLocal';
-import { RegisterLocalUser } from '../../src/application/use-cases/RegisterLocalUser';
-import { TokenService } from '../../src/application/ports/TokenService';
+import { RegisterAndLoginLocal } from '../../../src/application/use-cases/RegisterAndLoginLocal';
+import { RegisterLocalUser } from '../../../src/application/use-cases/RegisterLocalUser';
+import { SignedTokenResult, TokenService } from '../../../src/application/ports/TokenService';
 
 const request = {
   id: 'c7276ad0-2467-4cf9-a91f-5f6391a170b9',
@@ -35,9 +35,15 @@ describe('RegisterAndLoginLocal', () => {
       name: request.name,
       email: request.email,
     };
+    const date = new Date();
+
+    const accessToken: SignedTokenResult = {
+      expiresAt: date,
+      token: 'signed-token',
+    };
 
     deps.registerLocalUser.execute.mockResolvedValue(registeredUser);
-    deps.tokenService.signAccessToken.mockResolvedValue('signed-token');
+    deps.tokenService.signAccessToken.mockReturnValue(accessToken);
 
     const result = await useCase.execute(request);
 
@@ -48,7 +54,7 @@ describe('RegisterAndLoginLocal', () => {
     });
     expect(result).toEqual({
       ...registeredUser,
-      accessToken: 'signed-token',
+      accessToken: accessToken,
     });
   });
 

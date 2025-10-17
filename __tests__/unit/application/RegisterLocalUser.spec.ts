@@ -1,10 +1,10 @@
-import { RegisterLocalUser } from '../../src/application/use-cases/RegisterLocalUser';
-import { UserRepository } from '../../src/domain/repositories/UserRepository';
-import { PasswordHasher } from '../../src/application/ports/PasswordHasher';
-import { User } from '../../src/domain/aggregates/User';
-import { Email } from '../../src/domain/value-objects/Email';
-import { UserAlreadyExistsError } from '../../src/domain/errors/domain/UserAlreadyExistsError';
-import { Clock } from '../../src/shared/domain/time/Clock';
+import { RegisterLocalUser } from '../../../src/application/use-cases/RegisterLocalUser';
+import { UserRepository } from '../../../src/domain/repositories/UserRepository';
+import { PasswordHasher } from '../../../src/application/ports/PasswordHasher';
+import { User } from '../../../src/domain/aggregates/User';
+import { Email } from '../../../src/domain/value-objects/Email';
+import { UserAlreadyExistsError } from '../../../src/domain/errors/domain/UserAlreadyExistsError';
+import { Clock } from '../../../src/shared/domain/time/Clock';
 
 const fixedDate = new Date('2025-01-01T10:00:00.000Z');
 
@@ -86,7 +86,7 @@ describe('RegisterLocalUser', () => {
     expect(savedUser).toBeInstanceOf(User);
     expect(savedUser.id.toString()).toBe('ffb9d9b7-2906-4a7c-944b-0db62f764a32');
     expect(savedUser.email.equals(new Email('jane@example.com'))).toBe(true);
-    expect(savedUser.passwordHash.toString()).toBe('hashed-password');
+    expect(savedUser.passwordHash?.toString()).toBe('hashed-password');
 
     expect(result).toEqual({
       id: savedUser.id.toString(),
