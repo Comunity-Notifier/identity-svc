@@ -36,7 +36,7 @@ export class LoginLocal {
       throw new InvalidCredentialsError();
     }
 
-    const accessToken = await this.deps.tokenService.signAccessToken({
+    const accessToken = this.deps.tokenService.signAccessToken({
       email: user.email.toString(),
       sub: user.id.toString(),
     });

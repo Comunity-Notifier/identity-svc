@@ -13,7 +13,7 @@ export class RegisterAndLoginLocal {
   async execute(request: RegisterLocalUserRequest): Promise<RegisterAndLoginLocalResult> {
     const user = await this.deps.registerLocalUser.execute(request);
 
-    const accessToken = await this.deps.tokenService.signAccessToken({
+    const accessToken = this.deps.tokenService.signAccessToken({
       sub: user.id,
       email: user.email,
     });
