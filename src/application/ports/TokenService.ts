@@ -3,7 +3,12 @@ export interface TokenPayload {
   email: string;
 }
 
+export interface SignedTokenResult {
+  token: string;
+  expiresAt: Date;
+}
+
 export interface TokenService {
-  signAccessToken(payload: TokenPayload): Promise<string>;
-  verify(token: string): Promise<TokenPayload>;
+  signAccessToken(payload: TokenPayload): SignedTokenResult;
+  verify(token: string): TokenPayload;
 }

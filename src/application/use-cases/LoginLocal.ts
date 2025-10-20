@@ -23,6 +23,9 @@ export class LoginLocal {
     }
 
     const passwordHash = user.passwordHash;
+    if (!passwordHash) {
+      throw new InvalidCredentialsError();
+    }
 
     const isValid = await this.deps.passwordHasher.compare(
       request.password,
@@ -33,7 +36,7 @@ export class LoginLocal {
       throw new InvalidCredentialsError();
     }
 
-    const accessToken = await this.deps.tokenService.signAccessToken({
+    const accessToken = this.deps.tokenService.signAccessToken({
       email: user.email.toString(),
       sub: user.id.toString(),
     });

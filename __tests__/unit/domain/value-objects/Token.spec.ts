@@ -1,6 +1,6 @@
-import { Token } from '../../../src/domain/value-objects/Token';
-import { EmptyValueError } from '../../../src/domain/errors/value-objects/EmptyValueError';
-import { InvalidFormatError } from '../../../src/domain/errors/value-objects/InvalidFormatError';
+import { Token } from 'src/domain/value-objects/Token';
+import { EmptyValueError } from 'src/domain/errors/value-objects/EmptyValueError';
+import { InvalidFormatError } from 'src/domain/errors/value-objects/InvalidFormatError';
 
 describe('Token Value Object', () => {
   it('should create a valid JWT token', () => {

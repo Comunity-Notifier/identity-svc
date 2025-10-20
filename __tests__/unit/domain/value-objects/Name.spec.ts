@@ -1,6 +1,6 @@
-import { Name } from '../../../src/domain/value-objects/Name';
-import { EmptyValueError } from '../../../src/domain/errors/value-objects/EmptyValueError';
-import { InvalidFormatError } from '../../../src/domain/errors/value-objects/InvalidFormatError';
+import { Name } from 'src/domain/value-objects/Name';
+import { EmptyValueError } from 'src/domain/errors/value-objects/EmptyValueError';
+import { InvalidFormatError } from 'src/domain/errors/value-objects/InvalidFormatError';
 
 describe('Name Value Object', () => {
   it('should create a valid name', () => {

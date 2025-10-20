@@ -1,5 +1,5 @@
-import { Id } from '../../../src/domain/value-objects/Id';
-import { InvalidFormatError } from '../../../src/domain/errors/value-objects/InvalidFormatError';
+import { Id } from 'src/domain/value-objects/Id';
+import { InvalidFormatError } from 'src/domain/errors/value-objects/InvalidFormatError';
 
 describe('Id Value Object', () => {
   const validUUID = '123e4567-e89b-12d3-a456-426614174000';

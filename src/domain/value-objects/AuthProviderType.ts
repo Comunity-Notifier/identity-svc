@@ -1,7 +1,6 @@
 import { InvalidFormatError } from '../errors/value-objects/InvalidFormatError';
 
 export enum AuthProvider {
-  CREDENTIAL = 'credential',
   GOOGLE = 'google',
 }
 
