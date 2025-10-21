@@ -49,14 +49,4 @@ describe('JwtTokenService ', () => {
     expect(diff).toBeGreaterThanOrEqual(3599_000);
     expect(diff).toBeLessThanOrEqual(3601_000);
   });
-
-  it('should use default secret if none provided', () => {
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
-    const svc = new JwtTokenService({ clock });
-    const { token } = svc.signAccessToken({ sub: 'abc', email: 'email@gmail.com' });
-    const verified = jwt.verify(token, 'token_dev') as TokenPayload;
-    expect(verified.sub).toBe('abc');
-    expect(warnSpy).toHaveBeenCalled();
-    warnSpy.mockRestore();
-  });
 });

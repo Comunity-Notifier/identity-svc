@@ -3,10 +3,12 @@ import { Argon2PasswordHasher } from '../../../src/infrastructure/services/Argon
 describe('Argon2PasswordHasher', () => {
   const password = 'Sup3rS3cret!';
   const hasher = new Argon2PasswordHasher({
-    hash: {
-      timeCost: 2,
-      memoryCost: 1 << 15,
-      parallelism: 1,
+    optionsArgon2: {
+      hash: {
+        timeCost: 2,
+        memoryCost: 1 << 15,
+        parallelism: 1,
+      },
     },
   });
 

@@ -3,25 +3,22 @@ import { SignedTokenResult, TokenPayload, TokenService } from 'src/application/p
 import { Clock, SystemClock } from 'src/shared/domain/time/Clock';
 
 export interface TokenConfig {
-  secret?: string;
-  expiresIn?: string;
+  secret: string;
+  expiresIn: string;
 }
 
 export class JwtTokenService implements TokenService {
-  private readonly config?: TokenConfig;
+  private readonly config: TokenConfig;
   private readonly clock: Clock;
 
-  constructor({ tokenConfig, clock }: { tokenConfig?: TokenConfig; clock?: Clock }) {
-    if (!tokenConfig?.secret) {
-      console.warn('⚠️  The JWT secret is undefined. A default insecure value is being used.');
-    }
+  constructor({ tokenConfig, clock }: { tokenConfig: TokenConfig; clock?: Clock }) {
     this.clock = clock ?? new SystemClock();
     this.config = tokenConfig;
   }
 
   signAccessToken(payload: TokenPayload): SignedTokenResult {
-    const expiresIn = this.parseExpiresIn(this.config?.expiresIn ?? '1d');
-    const token = jwt.sign(payload, this.config?.secret ?? 'token_dev', {
+    const expiresIn = this.parseExpiresIn(this.config.expiresIn);
+    const token = jwt.sign(payload, this.config.secret, {
       expiresIn,
     });
 
@@ -31,7 +28,7 @@ export class JwtTokenService implements TokenService {
   }
 
   verify(token: string): TokenPayload {
-    return jwt.verify(token, this.config?.secret ?? 'token_dev') as TokenPayload;
+    return jwt.verify(token, this.config.secret) as TokenPayload;
   }
 
   private parseExpiresIn(value: string | number): number {

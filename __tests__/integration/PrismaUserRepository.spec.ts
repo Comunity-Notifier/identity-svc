@@ -82,7 +82,7 @@ describe('PrismaUserRepository integration', () => {
     prisma = new PrismaClient();
     await prisma.account.deleteMany();
     await prisma.user.deleteMany();
-    repository = new PrismaUserRepository(prisma);
+    repository = new PrismaUserRepository({ prismaClient: prisma });
   });
 
   afterAll(async () => {
