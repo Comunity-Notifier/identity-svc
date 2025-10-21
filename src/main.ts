@@ -1,7 +1,7 @@
 import { createApp } from './presentation/app';
 
-const main = async () => {
-  const app = await createApp();
+const main = () => {
+  const app = createApp();
 
   const PORT = process.env.PORT ?? 3000;
 
@@ -10,4 +10,4 @@ const main = async () => {
   });
 };
 
-main().catch((err) => console.error(err));
+main();

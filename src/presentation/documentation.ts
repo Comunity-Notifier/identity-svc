@@ -20,6 +20,15 @@ export const documentZod = createDocument({
           '201': {
             description: '201 OK',
           },
+          '400': {
+            description: 'Bad Request',
+          },
+          '409': {
+            description: 'Conflict',
+          },
+          '500': {
+            description: 'Unexpected error',
+          },
         },
       },
     },
@@ -40,7 +49,19 @@ export const documentZod = createDocument({
           '401': {
             description: 'Unauthorized',
           },
-          default: {
+          '500': {
+            description: 'Unexpected error',
+          },
+        },
+      },
+    },
+    '/identity/logout': {
+      post: {
+        responses: {
+          '204': {
+            description: '204 OK',
+          },
+          '500': {
             description: 'Unexpected error',
           },
         },

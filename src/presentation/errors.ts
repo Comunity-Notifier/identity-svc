@@ -6,6 +6,7 @@ import { UserAlreadyExistsError } from '../domain/errors/domain/UserAlreadyExist
 import { UserNotFoundError } from '../domain/errors/domain/UserNotFoundError';
 import { EmptyValueError } from '../domain/errors/value-objects/EmptyValueError';
 import { InvalidFormatError } from '../domain/errors/value-objects/InvalidFormatError';
+import { DomainError } from 'src/domain/errors/DomainError';
 
 interface ErrorResponseBody {
   error: {
@@ -13,8 +14,6 @@ interface ErrorResponseBody {
     message: string;
   };
 }
-
-class DomainError extends Error {}
 
 type DomainErrorConstructor = new (...args: string[]) => DomainError;
 

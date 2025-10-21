@@ -1,5 +1,4 @@
-import { CookieOptions, Response } from 'express';
-import { asyncHandler } from '../errors';
+import { CookieOptions, Response, Request } from 'express';
 import { httpConfig } from '../config';
 import { createSuccessResponse } from '../api-response';
 import {
@@ -24,21 +23,21 @@ export class IdentityController {
     this.registerAndLoginLocal = registerAndLoginLocal;
   }
 
-  register = asyncHandler(async (req, res) => {
+  async register(req: Request, res: Response) {
     const body = registerSchema.parse(req.body);
     const result = await this.registerAndLoginLocal.execute(body);
-    this.setAccessTokenCookie(res, result.accessToken, new Date(Date.now() + 7 * 60 * 60 * 1000));
+    this.setAccessTokenCookie(res, result.accessToken.token, result.accessToken.expiresAt);
     res.status(201).end();
-  });
+  }
 
-  login = asyncHandler(async (req, res) => {
+  async login(req: Request, res: Response) {
     const body = loginSchema.parse(req.body);
     const { accessToken, ...rest } = await this.loginLocal.execute(body);
-    this.setAccessTokenCookie(res, accessToken, new Date(Date.now() + 7 * 60 * 60 * 1000));
+    this.setAccessTokenCookie(res, accessToken.token, new Date(Date.now() + 7 * 60 * 60 * 1000));
 
     const response = createSuccessResponse<LoginLocalResponseDto>(rest);
     res.status(200).json(response);
-  });
+  }
 
   logout(_: Request, res: Response) {
     res.clearCookie(httpConfig.tokenCookie.name, {
@@ -49,7 +48,7 @@ export class IdentityController {
       path: httpConfig.tokenCookie.path ?? '/',
     });
 
-    res.status(204);
+    res.status(204).end();
   }
 
   private setAccessTokenCookie = (res: Response, token: string, expiresAt: Date) => {

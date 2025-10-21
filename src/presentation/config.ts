@@ -1,4 +1,5 @@
 import type { CorsOptions } from 'cors';
+import { TokenConfig } from 'src/infrastructure/services/JwtTokenService';
 
 export interface TokenCookieConfig {
   name: string;
@@ -29,4 +30,20 @@ export const httpConfig: HttpConfig = {
         credentials: true,
       },
   trustProxy: process.env.TRUST_PROXY === 'true',
+};
+
+let jwtSecret: string;
+
+if (process.env.NODE_ENV === 'Production' && !process.env.JWT_SECRET) {
+  throw new Error('❌  El secreto de JWT debe estar definido en producción.');
+} else {
+  jwtSecret = process.env.JWT_SECRET ?? 'token_secret';
+  if (!process.env.JWT_SECRET) {
+    console.warn('⚠️  The JWT secret is undefined. A default insecure value is being used.');
+  }
+}
+
+export const tokenConfig: TokenConfig = {
+  secret: jwtSecret,
+  expiresIn: process.env.JWT_EXPIRES_IN ?? '7d',
 };
