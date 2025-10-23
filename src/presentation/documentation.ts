@@ -1,11 +1,33 @@
 import { createDocument } from 'zod-openapi';
-import { loginSchema, loginSchemaResponse, registerSchema } from './validators/identity-schema';
+import {
+  apiErrorResponseSchema,
+  apiSuccessResponseSchema,
+  loginSchema,
+  loginSchemaResponse,
+  registerSchema,
+} from './validators/identity-schema';
 
 export const documentZod = createDocument({
   openapi: '3.0.0',
   info: {
     title: 'Identity microservice',
     version: '1.0.0',
+  },
+  components: {
+    schemas: {
+      SuccessResponse: apiSuccessResponseSchema,
+      ErrorResponse: apiErrorResponseSchema,
+    },
+    responses: {
+      SuccessResponse: {
+        description: 'Success response (global)',
+        content: { 'application/json': { schema: apiSuccessResponseSchema } },
+      },
+      ErrorResponse: {
+        description: 'Error response (global)',
+        content: { 'application/json': { schema: apiErrorResponseSchema } },
+      },
+    },
   },
   paths: {
     '/identity/register': {
@@ -18,7 +40,7 @@ export const documentZod = createDocument({
         },
         responses: {
           '201': {
-            description: '201 OK',
+            description: 'OK',
           },
           '400': {
             description: 'Bad Request',
@@ -41,7 +63,7 @@ export const documentZod = createDocument({
         },
         responses: {
           '200': {
-            description: '200 OK',
+            description: ' OK',
             content: {
               'application/json': { schema: loginSchemaResponse },
             },

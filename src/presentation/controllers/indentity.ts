@@ -33,7 +33,7 @@ export class IdentityController {
   async login(req: Request, res: Response) {
     const body = loginSchema.parse(req.body);
     const { accessToken, ...rest } = await this.loginLocal.execute(body);
-    this.setAccessTokenCookie(res, accessToken.token, new Date(Date.now() + 7 * 60 * 60 * 1000));
+    this.setAccessTokenCookie(res, accessToken.token, accessToken.expiresAt);
 
     const response = createSuccessResponse<LoginLocalResponseDto>(rest);
     res.status(200).json(response);

@@ -1,14 +1,10 @@
-export interface ApiResponse<T = unknown> {
-  success: boolean;
-  data: T | null;
-}
+import { ApiErrorResponse, ApiSuccessResponse } from './validators/identity-schema';
 
-export interface ApiErrorResponse {
-  success: boolean;
-  error: {
-    code: string;
-    message: string;
-  };
+class ApiResponse<T = unknown> implements ApiSuccessResponse {
+  constructor(
+    public data: T | null,
+    public success: boolean
+  ) {}
 }
 
 export function createSuccessResponse<T>(data: T): ApiResponse<T> {
