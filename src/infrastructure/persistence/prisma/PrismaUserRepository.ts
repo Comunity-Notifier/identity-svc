@@ -114,8 +114,8 @@ type AccountWithUser = Prisma.AccountGetPayload<{
 export class PrismaUserRepository implements UserRepository {
   private readonly prisma: PrismaClient;
 
-  constructor(prisma?: PrismaClient) {
-    this.prisma = prisma ?? new PrismaClient();
+  constructor({ prismaClient }: { prismaClient?: PrismaClient }) {
+    this.prisma = prismaClient ?? new PrismaClient();
   }
 
   async findById(id: Id): Promise<User | null> {

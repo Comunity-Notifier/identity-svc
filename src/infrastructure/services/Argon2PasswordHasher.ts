@@ -29,12 +29,12 @@ export class Argon2PasswordHasher implements PasswordHasher {
 
   private readonly verifyOptions?: Argon2PasswordHasherOptions['verify'];
 
-  constructor(options: Argon2PasswordHasherOptions = {}) {
+  constructor({ optionsArgon2 = {} }: { optionsArgon2: Argon2PasswordHasherOptions }) {
     this.hashOptions = {
       ...DEFAULT_HASH_OPTIONS,
-      ...options.hash,
+      ...optionsArgon2.hash,
     };
-    this.verifyOptions = options.verify;
+    this.verifyOptions = optionsArgon2.verify;
   }
 
   async hash(password: string): Promise<string> {

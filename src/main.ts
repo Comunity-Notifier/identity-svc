@@ -1,7 +1,13 @@
-import express from 'express';
+import { createApp } from './presentation/app';
 
-const app = express();
+const main = () => {
+  const app = createApp();
 
-app.listen(3000, () => {
-  console.warn(`Servidor escuchando en el puerto ${3001}`);
-});
+  const PORT = process.env.PORT ?? 3000;
+
+  app.listen(PORT, () => {
+    console.warn(`Server is running on port ${PORT}`);
+  });
+};
+
+main();
